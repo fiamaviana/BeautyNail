@@ -1,8 +1,20 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
 	<head>
 		<title>Beauty Nail</title>
+		<script th:replace="fragments/head :: headerElement"></script>
 	</head>
 	<body>
-		<h1> Welcome to Beauty Nail</h1>
-	</body>		
+		<div th:replace="fragments/head :: header"></div>
+		<div class="container">
+			<div class="row" style="margin-top: 1.5em;">
+				<div class="col-8">
+					<h1> Welcome to Beauty Nail</h1>
+				</div>
+				<div class="col-4">
+				
+				</div>
+			</div>
+		</div>
+	</body>	
 </html>
