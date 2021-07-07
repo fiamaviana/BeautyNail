@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Booking {
 	private Integer bookingId;
+	private String type;
 	private String date;
 	private String time;
 	private Users user;
@@ -41,6 +42,14 @@ public class Booking {
 		this.time = time;
 	}
 	
+	
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	@ManyToOne
 	public Users getUser() {
 		return user;
@@ -58,10 +67,10 @@ public class Booking {
 	}
 	@Override
 	public String toString() {
-		return "Booking [bookingId=" + bookingId + ", date=" + date + ", time=" + time + ", user=" + user
-				+ ", manicures=" + manicures + "]";
+		return "Booking [bookingId=" + bookingId + ", type=" + type + ", date=" + date + ", time=" + time + ", user="
+				+ user + ", manicures=" + manicures + "]";
 	}
 	
-	
+
 	
 }

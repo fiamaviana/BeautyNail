@@ -1,7 +1,6 @@
 package com.beautynail.web;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,12 +41,13 @@ public class BookingContrroler {
 		return "booking";
 	}
 	
+	//updating
 	//populating details of the new booking and saving it in the databases
 	@PostMapping("/booking/{bookingId}")
 	public String saveBooking(@PathVariable Integer bookingId, Booking booking,@AuthenticationPrincipal Users user) {
 		booking.setUser(user);
 		booking = bookingRepo.save(booking);
-		return "redirect:/booking/"+booking.getBookingId();
+		return "redirect:/dashboard";
 	}
 	
 	//creating a new booking
@@ -59,5 +60,16 @@ public class BookingContrroler {
 		booking = bookingRepo.save(booking);
 				
 		return "redirect:/booking/"+booking.getBookingId();
+	}
+	
+	//deleting a new booking
+	@DeleteMapping("/booking/{bookingId}")
+	public String delete(@PathVariable Integer bookingId){
+		//loading the booking from the databases
+		Optional<Booking> bookingOpt = bookingRepo.findById(bookingId);
+		if(bookingOpt.isPresent()) {
+			bookingRepo.delete(bookingOpt.get());
+		}
+		return "redirect:/dashboard";
 	}
 }

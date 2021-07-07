@@ -29,9 +29,13 @@ public class LoginController {
 	
 	@PostMapping("/register")
 	public String registerPost (@ModelAttribute Users user) {
+		
 		userService.save(user);
 		//when making a post, return a redirect page to avoid sending duplicate data
-		return "redirect:/register";
+		return "login";
 	}
-
+	@GetMapping("/manicure")
+	public String manicure() {
+		return "manicure";
+	}
 }

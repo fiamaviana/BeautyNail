@@ -20,19 +20,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
-	//authentication
+	//authentication to check if the user is in the databases
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.userDetailsService(userDetailsService)
-			.passwordEncoder(getPasswordEncoder());
-//this was used as a test before setting the user data		
-//		auth.inMemoryAuthentication()
-//			.passwordEncoder(getPasswordEncoder())
-//			.withUser("fiama@gmail.com")
-//			.password(getPasswordEncoder().encode("123456"))
-//			.roles("USER");
-		
+			.passwordEncoder(getPasswordEncoder());	
 	}
 	//authorization
 	@Override
@@ -41,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/register").permitAll()
+				.antMatchers("/manicure").permitAll()
 				.antMatchers("/images/**").permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().hasRole("USER").and()
