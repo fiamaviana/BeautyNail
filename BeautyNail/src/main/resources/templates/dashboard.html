@@ -4,23 +4,18 @@
 		<title>Beauty Nail</title>
 		<script th:replace="fragments/head :: headerElement"></script>
 	</head>
-	<body>
+	<body class="backImg">
 		<div th:replace="fragments/head :: header"></div>
 		<div class="container" style="margin-top: 1.5em;">
 			<div class="row">
-				<div class="col-8">
-					<h1>Beauty Nail Dashboard</h1>
+				<div class="col-8" style="color:whitesmoke">
+					<h1>My Bookings</h1>
 				</div>
 
 			</div>
 			
-			<div class="jumbotron">
+
 				<div th:if"${booking !=null}">
-					<div class="row">
-						<div class="col">
-							<h2>My Bookings</h2>
-						</div>
-					</div>
 					<div class="row">
 						<div class="col">
 							<form action="/booking" method="post">
@@ -30,9 +25,9 @@
 						</div>
 					</div>
 					
-					<div class="row" >
+					<div class="row">
 						  <div class="col-sm-6">
-						    <div class="card" th:each="booking : ${booking}">
+						    <div class="card" th:each="booking : ${booking}" style="margin-top: 10px;">
 						      <div class="card-body">
 						        <h5 class="card-title" th:text="${booking.type}">Manicure</h5>
 						        <p class="card-text" th:text="${booking.date}">Date</p>
@@ -43,8 +38,7 @@
 						  </div>
 					</div>
 				</div>
-			</div>
-			
-		</div>
+			</div>		
+	
 	</body>
 </html>

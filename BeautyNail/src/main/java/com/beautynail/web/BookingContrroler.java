@@ -25,7 +25,6 @@ public class BookingContrroler {
 	@Autowired
 	private BookingRepository bookingRepo;
 
-	
 	@GetMapping("/booking/{bookingId}")
 	public String getBooking(@PathVariable Integer bookingId, ModelMap model, HttpServletResponse response) throws IOException{
 		//loading the booking from the databases
