@@ -12,18 +12,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.beautynail.domain.Booking;
 import com.beautynail.domain.Users;
 import com.beautynail.repositories.BookingRepository;
+import com.beautynail.services.BookingService;
+
 
 @Controller
 public class BookingContrroler {
 	
 	@Autowired
 	private BookingRepository bookingRepo;
+	
+	@Autowired
+	private BookingService bookingServ;
+
 
 	@GetMapping("/booking/{bookingId}")
 	public String getBooking(@PathVariable Integer bookingId, ModelMap model, HttpServletResponse response) throws IOException{
@@ -40,35 +50,33 @@ public class BookingContrroler {
 		return "booking";
 	}
 	
-	//updating
-	//populating details of the new booking and saving it in the databases
-	@PostMapping("/booking/{bookingId}")
-	public String saveBooking(@PathVariable Integer bookingId, Booking booking,@AuthenticationPrincipal Users user) {
-		booking.setUser(user);
-		booking = bookingRepo.save(booking);
-		return "redirect:/dashboard";
-	}
 	
 	//creating a new booking
 	@PostMapping("/booking")
 	public String createBooking(@AuthenticationPrincipal Users user) {
 		Booking booking = new Booking();
-		
-		booking.setUser(user);
 
 		booking = bookingRepo.save(booking);
 				
 		return "redirect:/booking/"+booking.getBookingId();
 	}
 	
-	//deleting a new booking
-	@DeleteMapping("/booking/{bookingId}")
-	public String delete(@PathVariable Integer bookingId){
-		//loading the booking from the databases
-		Optional<Booking> bookingOpt = bookingRepo.findById(bookingId);
-		if(bookingOpt.isPresent()) {
-			bookingRepo.delete(bookingOpt.get());
+
+	//updating or deleting a booking
+	@RequestMapping(method = RequestMethod.POST, value="/booking/{bookingId}")
+	public String edit(@ModelAttribute ModelMap model,
+			@RequestParam(value="action",required=true)String action,
+			@PathVariable Integer bookingId,Booking booking,@AuthenticationPrincipal Users user) {
+		if(action.equals("save")){
+			booking.setUser(user);
+			booking = bookingRepo.save(booking);
 		}
-		return "redirect:/dashboard";
+		if(action.equals("delete")) {
+			bookingRepo.deleteById(bookingId);	
+		}
+				
+		return "redirect:/dashboard"; 
 	}
+	
+	
 }

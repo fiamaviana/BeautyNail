@@ -44,6 +44,22 @@
 			    
 			}
 			
+			function validateBooking(){
+				var date = document.forms["booking"]["date"].value;
+				var type = document.forms["booking"]["type"].value;
+				if(date==null||date==""){
+					alert("Please enter a date")
+			        return false;
+				}
+				if(type==null||type==""){
+					alert("Please enter a manicure of your choise")
+			        return false;
+				}
+				
+				return true;
+				
+			}
+			
 			</script>
 		</p>
 		
