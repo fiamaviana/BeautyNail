@@ -15,7 +15,7 @@
 			</div>
 			
 
-				<div th:if"${booking !=null}">
+				<div th:if"${booking.date !=null}">
 					<div class="row">
 						<div class="col">
 							<form action="/booking" method="post">
@@ -26,9 +26,13 @@
 					</div>
 					
 					<div class="row">
-						  <div class="col-sm-6">
+						  <div class="col-sm-6" sec:authorize="hasRole('USER')">
 						    <div class="card" th:each="booking : ${booking}" style="margin-top: 10px;">
 						      <div class="card-body">
+					      		<div sec:authorize="hasRole('ADMIN')">
+								    <h5 class="card-title" th:if"${booking.user.name !=null}" th:text="${booking.user.name}">User</h5>
+								</div>
+						      	
 						        <h5 class="card-title" th:text="${booking.type}">Manicure</h5>
 						        <p class="card-text" th:text="${booking.date}">Date</p>
 						        <p class="card-text" th:text="${booking.time}">Time</p>
@@ -36,6 +40,33 @@
 						      </div>
 						    </div>
 						  </div>
+						  <div class="col-sm-6">
+						  	<div sec:authorize="hasRole('ADMIN')">
+						  	 	<h2 style="color:white">Welcome <spam>Admin</spam> here you can check all your books</h2>
+						  	 	<table>
+						  	 		<tr>
+						  	 			<th>Name</th>
+						  	 			<th>Manicure Type</th>
+						  	 			<th>Date</th>
+						  	 			<th>Time</th>
+						  	 			<th>Edit/Cancel</th>
+						  	 		</tr>
+						  	 		<tr th:each="booking : ${booking}">
+						  	 			<td th:if"${booking.user.name !=null}" th:text="${booking.user.name}"></td>
+						  	 			<td th:text="${booking.type}"></td>
+						  	 			<td th:text="${booking.date}"></td>
+						  	 			<td th:text="${booking.time}"></td>
+						  	 			<td>
+						  	 			<a th:href="@{/booking/{bookingId}(bookingId=${booking.bookingId})}" class="btn btn-primary">Edit</a>
+						  	 			</td>
+						  	 		</tr>
+						  	 	</table>
+						  	</div>
+						  </div>
+					</div>
+					
+					
+					
 					</div>
 				</div>
 			</div>		

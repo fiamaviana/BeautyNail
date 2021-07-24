@@ -11,9 +11,7 @@ public class BookingService {
 	@Autowired
 	private BookingRepository bookingRepo;
 	
-	public void delete(@PathVariable Integer bookingId,Booking booking){
-		//bookingRepo.delete(booking);
+	public void delete(@PathVariable Integer bookingId,Booking booking){	
 		bookingRepo.deleteById(bookingId);
-		
 	}
 }

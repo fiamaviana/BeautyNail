@@ -36,8 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/register").permitAll()
 				.antMatchers("/manicure").permitAll()
 				.antMatchers("/images/**").permitAll()
+				.antMatchers("/manicureForm").hasRole("ADMIN")
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.anyRequest().hasRole("USER").and()
+				.anyRequest().authenticated().and()
 			.formLogin()
 				.loginPage("/login")
 				.defaultSuccessUrl("/dashboard")
@@ -45,6 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.logoutUrl("/logout")
-				.permitAll();
+				.permitAll()
+			.and()
+	        .exceptionHandling().accessDeniedPage("/403")
+	        ;
 	}
 }

@@ -1,17 +1,24 @@
 package com.beautynail.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Manicure {
 	private Integer manicureID;
 	private String type;
+	private String description;
 	private double price;
-	private Booking booking;
+	private Set<Booking> bookings = new HashSet<>();
 	
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,14 +41,21 @@ public class Manicure {
 		this.price = price;
 	}
 	
-	@ManyToOne
-	public Booking getBooking() {
-		return booking;
+	public String getDescription() {
+		return description;
 	}
-	public void setBooking(Booking booking) {
-		this.booking = booking;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
+	
+	@OneToMany(cascade=CascadeType.PERSIST,fetch=FetchType.LAZY, mappedBy="manicure")
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
+	}
+	
 		
 
 }

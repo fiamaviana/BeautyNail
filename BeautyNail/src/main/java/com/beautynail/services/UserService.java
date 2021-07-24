@@ -18,7 +18,7 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	public Users save(Users user) {
-		//send encoded password to the data
+		//set encoded password to the data
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 		
@@ -32,4 +32,6 @@ public class UserService {
 		
 		return userRepo.save(user);
 	}
+	
+	
 }

@@ -19,7 +19,7 @@ public class Booking {
 	private String date;
 	private String time;
 	private Users user;
-	private Set<Manicure> manicures = new HashSet<>();
+	private Manicure manicure;
 
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -42,8 +42,6 @@ public class Booking {
 		this.time = time;
 	}
 	
-	
-	
 	public String getType() {
 		return type;
 	}
@@ -58,18 +56,15 @@ public class Booking {
 		this.user = user;
 	}
 	
-	@OneToMany(cascade=CascadeType.PERSIST,fetch=FetchType.LAZY, mappedBy="booking")
-	public Set<Manicure> getManicures() {
-		return manicures;
+	@ManyToOne
+	public Manicure getManicure() {
+		return manicure;
 	}
-	public void setManicures(Set<Manicure> manicures) {
-		this.manicures = manicures;
+	public void setManicure(Manicure manicure) {
+		this.manicure = manicure;
 	}
-	@Override
-	public String toString() {
-		return "Booking [bookingId=" + bookingId + ", type=" + type + ", date=" + date + ", time=" + time + ", user="
-				+ user + ", manicures=" + manicures + "]";
-	}
+	
+
 	
 
 	

@@ -23,7 +23,6 @@
 					                  Reason: <span th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
 					                </div>
 					        </div>
-					     
 					        <!-- the configured LogoutConfigurer#logoutSuccessUrl is /login?logout and contains the query param logout -->
 					        <div th:if="${param.logout != null}">
 					            You have been logged out.
@@ -46,6 +45,12 @@
 					 </form>
 			 		</div>
 				</div>
+				<div id="alert" th:if="${param.error != null}" class=" alert alert-info" role="alert">
+		            <a class="nav-link" href="/register"> If you don't have an account, click here to Sign up. </a></li>
+		                <div th:if="${SPRING_SECURITY_LAST_EXCEPTION != null}">
+		                  Reason: <span th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+		                </div>
+		        </div>
 			</div>	
 		</div>
 	</div>

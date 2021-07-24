@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UserRepository userRepo;
 	
 	
-	//this method should checks if the user is in the database and check the password if its match
+	//this method should checks if the user is in the database 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Users user = userRepo.findByEmail(username);
@@ -25,5 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("Invalid Username and password");
 		return new CustomSecurityUser(user);
 	}
+	
+
+	
 
 }
