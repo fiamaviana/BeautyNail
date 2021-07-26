@@ -39,7 +39,7 @@
 							</div>			
 							<div class="row mt-3">
 					        	<div class="d-grid gap-2">
-									<button type="submit" name="action" value="save" class="btn btn-primary" id="manicureBtn"> Save </button>
+									<button type="submit" name="action" value="save" class="btn btn-primary" id="manicureBtn" onclick="validateManicForm()"> Save </button>
 								</div>
 							</div>
 					
@@ -47,16 +47,6 @@
 								<div class="d-grid gap-2">
 				        			<button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">Delete</button>
 								</div>
-							</div>
-							<div class="row mt-3">
-								<div class="d-grid gap-2">
-				        			<button type="button"  class="btn btn-secondary" onclick="return dashboard()">Return to Dashboard</button>
-								</div>
-								<script>
-									function dashboard(){
-										window.open("/dashboard","_self");
-									}
-								</script>
 							</div>
 						</form>
 						</div>

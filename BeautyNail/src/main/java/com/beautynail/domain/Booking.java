@@ -19,7 +19,6 @@ public class Booking {
 	private String date;
 	private String time;
 	private Users user;
-	private Manicure manicure;
 
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -55,16 +54,6 @@ public class Booking {
 	public void setUser(Users user) {
 		this.user = user;
 	}
-	
-	@ManyToOne
-	public Manicure getManicure() {
-		return manicure;
-	}
-	public void setManicure(Manicure manicure) {
-		this.manicure = manicure;
-	}
-	
-
 	
 
 	

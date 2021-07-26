@@ -24,11 +24,7 @@ import com.beautynail.services.UserDetailsServiceImpl;
 public class DashboardController {
 	@Autowired
 	private BookingRepository bookingRepo;
-	
-	@GetMapping("/")
-	public String rootView() {
-		return "manicure";
-	}
+
 	
 	
 	@GetMapping("/dashboard")

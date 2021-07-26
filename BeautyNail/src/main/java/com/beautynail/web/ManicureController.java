@@ -32,6 +32,13 @@ public class ManicureController {
 	@Autowired
 	private ManicureRepository manicureRepo;
 	
+	@GetMapping("/")
+	public String getmanicure(ModelMap model) {
+		List<Manicure> manicure = manicureRepo.findAll();
+		model.put("manicure", manicure);
+		return "manicure";
+	}
+	
 	@GetMapping("/manicure")
 	public String manicure(ModelMap model) {
 		List<Manicure> manicure = manicureRepo.findAll();
