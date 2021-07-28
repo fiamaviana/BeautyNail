@@ -21,6 +21,17 @@ public class Booking {
 	private Users user;
 
 	
+	public Booking() {
+		
+	}
+	public Booking(Integer bookingId, String type, String date, String time, Users user) {
+		super();
+		this.bookingId = bookingId;
+		this.type = type;
+		this.date = date;
+		this.time = time;
+		this.user = user;
+	}
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Integer getBookingId() {
 		return bookingId;

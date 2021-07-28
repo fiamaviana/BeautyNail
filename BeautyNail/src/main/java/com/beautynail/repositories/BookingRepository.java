@@ -21,7 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	Optional<Booking> findBooking(@Param("req")Booking req);
 
 
-	
+	//select * from booking where date =: date
 	@Query("SELECT booking FROM Booking booking WHERE booking.date = :#{#req.date}")
 	List<Booking> findBookingByDate(@Param("req")Booking req);
 
