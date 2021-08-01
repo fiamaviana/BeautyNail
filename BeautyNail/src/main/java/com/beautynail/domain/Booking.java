@@ -1,36 +1,33 @@
 package com.beautynail.domain;
 
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
 
 @Entity
 public class Booking {
 	private Integer bookingId;
-	private String type;
 	private String date;
 	private String time;
 	private Users user;
-
+	private Manicure manicure;
 	
+
 	public Booking() {
-		
+		super();
 	}
-	public Booking(Integer bookingId, String type, String date, String time, Users user) {
+	public Booking(Integer bookingId, String date, String time, Users user, Manicure manicure) {
 		super();
 		this.bookingId = bookingId;
-		this.type = type;
 		this.date = date;
 		this.time = time;
 		this.user = user;
+		this.manicure = manicure;
 	}
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Integer getBookingId() {
@@ -52,12 +49,6 @@ public class Booking {
 		this.time = time;
 	}
 	
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	@ManyToOne
 	public Users getUser() {
 		return user;
@@ -66,6 +57,13 @@ public class Booking {
 		this.user = user;
 	}
 	
+	@ManyToOne
+	public Manicure getManicure() {
+		return manicure;
+	}
+	public void setManicure(Manicure manicure) {
+		this.manicure = manicure;
+	}
 
 	
 }

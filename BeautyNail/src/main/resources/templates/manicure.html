@@ -51,7 +51,7 @@
 			<div class="col">
 				<form action="/manicure" method="post">
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-					<button sec:authorize="hasRole('ADMIN')" class="btn btn-primary" id="manicure" style="float:right">Create a new Manicure Service</button>
+					<button sec:authorize="hasRole('ADMIN')" class="btn btn-primary" id="manicure" style="float:right">Create a new nail designer</button>
 				</form>
 			</div>
 		</div>

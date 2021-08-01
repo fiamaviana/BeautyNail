@@ -23,6 +23,7 @@ public class Users {
 	private Set<Authority> authorities = new HashSet<>();
 	private Set<Booking> booking = new HashSet<>();
 	
+	
 
 	@OneToMany(cascade=CascadeType.PERSIST,fetch=FetchType.LAZY, mappedBy="user")	
 	public Set<Booking> getBooking() {
