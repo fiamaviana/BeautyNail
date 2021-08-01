@@ -18,8 +18,18 @@ public class Manicure {
 	private String type;
 	private String description;
 	private double price;
+	private Set<Booking> booking = new HashSet<>();
 	
-	
+	public Manicure() {
+		super();
+	}
+	public Manicure(Integer manicureID, String type, String description, double price) {
+		super();
+		this.manicureID = manicureID;
+		this.type = type;
+		this.description = description;
+		this.price = price;
+	}
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Integer getManicureID() {
 		return manicureID;
@@ -46,6 +56,15 @@ public class Manicure {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY, mappedBy="manicure")
+	public Set<Booking> getBooking() {
+		return booking;
+	}
+	public void setBooking(Set<Booking> booking) {
+		this.booking = booking;
+	}
+	
 	
 		
 

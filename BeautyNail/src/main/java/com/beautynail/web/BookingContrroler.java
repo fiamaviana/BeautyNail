@@ -2,12 +2,14 @@ package com.beautynail.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beautynail.domain.Booking;
+import com.beautynail.domain.Manicure;
 import com.beautynail.domain.Users;
 import com.beautynail.repositories.BookingRepository;
+import com.beautynail.repositories.ManicureRepository;
 import com.beautynail.services.BookingService;
 
 
@@ -37,6 +41,9 @@ public class BookingContrroler {
 	private BookingRepository bookingRepo;
 	
 	@Autowired
+	private ManicureRepository manicureRepo;
+	
+	@Autowired
 	private BookingService bookingServ;
 
 	
@@ -44,15 +51,18 @@ public class BookingContrroler {
 	public String getBooking(@PathVariable Integer bookingId, ModelMap model, HttpServletResponse response) throws IOException{
 		//loading the booking from the databases
 		Optional<Booking> bookingOpt = bookingRepo.findById(bookingId);
+
 		//put the booking into the model 
 		if(bookingOpt.isPresent()) {
 			Booking booking = bookingOpt.get();
 			model.put("booking", booking); //this enables to take the booking id and populate the field id in the booking.html file 
-				
+			//set view of manicure content
+		    List<Manicure> manicure = manicureRepo.findAll();
+		    model.addAttribute("manicure", manicure);	
 		}
 		
 		else {//handling exception in case the booking does not exist
-			response.sendError(HttpStatus.NOT_FOUND.value(),"Booking with id " + bookingId + " not found");
+			response.sendError(HttpStatus.NOT_FOUND.value(),"Booking with id " + bookingId + " was not found");
 			return "booking";
 		}
 		return "booking";
@@ -74,20 +84,21 @@ public class BookingContrroler {
 	@RequestMapping(method = RequestMethod.POST, value="/booking/{bookingId}")
 	public String edit(@ModelAttribute ModelMap model,
 			@RequestParam(value="action",required=true)String action,
-			@PathVariable Integer bookingId,Booking booking,@AuthenticationPrincipal Users user,
+			@PathVariable Integer bookingId,Booking booking, Manicure manicure,@AuthenticationPrincipal Users user,
 			RedirectAttributes redirAttrs) throws IOException {
 		
 		
 		if(action.equals("save")){
 			//check if already exists a booking with the same date and time
-			Optional<Booking> optBooking = bookingRepo.findBooking(booking);
+			Optional<Booking> optBooking = bookingRepo.findBookingByDateAndTime(booking);
 			if(optBooking.isPresent()) {
-				redirAttrs.addFlashAttribute("error", "Date and Time is not available, please choose another.");
+				redirAttrs.addFlashAttribute("error", "Date and Time are not available, please choose another.");
 				//response.sendError(HttpStatus.NOT_FOUND.value(),"Date and Time not available " );
 				return "redirect:/booking/" +booking.getBookingId();
 			}else {
 				booking.setUser(user);
-				redirAttrs.addFlashAttribute("success", "Thank you for chosen Beauty Nail! ");
+				booking.setManicure(manicure);
+				redirAttrs.addFlashAttribute("success", "Your reservation is confirmed. Payment can be made by cash or credit card on site. Thank you for choosing Beauty Nail!");
 				booking = bookingRepo.save(booking);
 				return "redirect:/booking/" +booking.getBookingId();
 			}
@@ -102,16 +113,17 @@ public class BookingContrroler {
 			ArrayList<String> times = new ArrayList<String>();
 			
 		    if(bookings != null) {
+		    
 		    	String date = booking.getDate();
 		    	for(Booking book : bookings) {
 		    		date = book.getDate();
 		    		times.add(book.getTime());
 		    	}
 		    	if(times.isEmpty()) {
-		    		redirAttrs.addFlashAttribute("success", "You can chose any time in " + date  + ".");
+		    		redirAttrs.addFlashAttribute("success", "You can chose any time on this date: " + date  + ".");
 		    		
 		    	} else {
-		    		redirAttrs.addFlashAttribute("error", "Not available in " +  date  + times);
+		    		redirAttrs.addFlashAttribute("error", "Not available on " +  date  + times);
 		    	}
 		    	
 		    	

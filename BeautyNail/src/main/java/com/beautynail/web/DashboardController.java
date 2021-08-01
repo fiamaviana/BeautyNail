@@ -1,5 +1,6 @@
 package com.beautynail.web;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,34 +19,37 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.beautynail.domain.Booking;
 import com.beautynail.domain.Users;
 import com.beautynail.repositories.BookingRepository;
+import com.beautynail.services.BookingService;
 import com.beautynail.services.UserDetailsServiceImpl;
 
 @Controller
 public class DashboardController {
 	@Autowired
 	private BookingRepository bookingRepo;
-
+	
+	@Autowired
+	private BookingService bookingService;
 	
 	
 	@GetMapping("/dashboard")
-	public String dashboard(@AuthenticationPrincipal Users user, ModelMap model, HttpServletRequest request){
+	public String dashboard(@AuthenticationPrincipal Users user, ModelMap model, HttpServletRequest request) throws ParseException{
 		List<Booking> booking;
-		
+		//bookingService.deleteAllBookingsBeforeToday();
 		if (request.isUserInRole("ROLE_ADMIN")) {
-			//if the admin is logged in it will show all bookings
+			booking = bookingRepo.findByUserIsNull();
+			//handling an error, in case a booking is created without a user but I need to find another way to improve this
+			for(Booking thisBook : booking) {
+				if(thisBook.getUser() == null) {
+					bookingRepo.delete(thisBook);
+				}
+			}
 			booking = bookingRepo.findAll();
 	    }
 		else {
 			//if is a user it will show only their bookings
 			booking = bookingRepo.findByUser(user);
 		}
-		
-		//handling an error, in case a booking is created without a user but I need to find another way to improve this
-		for(Booking thisBook : booking) {
-			if(thisBook.getUser() == null) {
-				bookingRepo.delete(thisBook);
-			}
-		}
+			
 		
 		model.put("booking", booking);
 		return "dashboard";
