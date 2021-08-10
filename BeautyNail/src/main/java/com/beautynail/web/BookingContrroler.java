@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.beautynail.domain.Manicure;
 import com.beautynail.domain.Users;
 import com.beautynail.repositories.BookingRepository;
 import com.beautynail.repositories.ManicureRepository;
+import com.beautynail.repositories.UserRepository;
 import com.beautynail.services.BookingService;
 
 
@@ -42,6 +44,9 @@ public class BookingContrroler {
 	
 	@Autowired
 	private ManicureRepository manicureRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	@Autowired
 	private BookingService bookingServ;
@@ -58,7 +63,10 @@ public class BookingContrroler {
 			model.put("booking", booking); //this enables to take the booking id and populate the field id in the booking.html file 
 			//set view of manicure content
 		    List<Manicure> manicure = manicureRepo.findAll();
-		    model.addAttribute("manicure", manicure);	
+		    model.addAttribute("manicure", manicure);
+		    //set view of user content
+		    List<Users> user = userRepo.findAll();
+		    model.addAttribute("user",user);
 		}
 		
 		else {//handling exception in case the booking does not exist
@@ -73,7 +81,7 @@ public class BookingContrroler {
 	@PostMapping("/booking")
 	public String createBooking(@AuthenticationPrincipal Users user) {
 		Booking booking = new Booking();
-
+		booking.setUser(user);
 		booking = bookingRepo.save(booking);
 				
 		return "redirect:/booking/"+booking.getBookingId();
@@ -85,8 +93,7 @@ public class BookingContrroler {
 	public String edit(@ModelAttribute ModelMap model,
 			@RequestParam(value="action",required=true)String action,
 			@PathVariable Integer bookingId,Booking booking, Manicure manicure,@AuthenticationPrincipal Users user,
-			RedirectAttributes redirAttrs) throws IOException {
-		
+			RedirectAttributes redirAttrs,HttpServletRequest request) throws IOException {
 		
 		if(action.equals("save")){
 			//check if already exists a booking with the same date and time
@@ -96,8 +103,9 @@ public class BookingContrroler {
 				//response.sendError(HttpStatus.NOT_FOUND.value(),"Date and Time not available " );
 				return "redirect:/booking/" +booking.getBookingId();
 			}else {
-				booking.setUser(user);
-				booking.setManicure(manicure);
+				if(request.isUserInRole("ROLE_USER")) {
+					booking.setUser(user);
+				}
 				redirAttrs.addFlashAttribute("success", "Your reservation is confirmed. Payment can be made by cash or credit card on site. Thank you for choosing Beauty Nail!");
 				booking = bookingRepo.save(booking);
 				return "redirect:/booking/" +booking.getBookingId();

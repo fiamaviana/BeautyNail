@@ -34,23 +34,23 @@ public class DashboardController {
 	@GetMapping("/dashboard")
 	public String dashboard(@AuthenticationPrincipal Users user, ModelMap model, HttpServletRequest request) throws ParseException{
 		List<Booking> booking;
-		//bookingService.deleteAllBookingsBeforeToday();
-		if (request.isUserInRole("ROLE_ADMIN")) {
-			booking = bookingRepo.findByUserIsNull();
-			//handling an error, in case a booking is created without a user but I need to find another way to improve this
-			for(Booking thisBook : booking) {
-				if(thisBook.getUser() == null) {
-					bookingRepo.delete(thisBook);
-				}
+		
+		booking = bookingRepo.findAll();
+		//handling an error, deleting a booking in case a it was created without a date or time or user
+		for(Booking thisBook : booking) {
+			if(thisBook.getDate() == null || thisBook.getUser() == null || thisBook.getTime() == null) {
+				bookingRepo.delete(thisBook);
 			}
-			booking = bookingRepo.findAll();
+		}
+		//if the user is admin it will show all bookings
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			booking = bookingRepo.findAllByOrderByDateAsc();
 	    }
 		else {
-			//if is a user it will show only their bookings
+			//if is a customer it will show only their bookings
 			booking = bookingRepo.findByUser(user);
 		}
-			
-		
+		model.put("user", user);	
 		model.put("booking", booking);
 		return "dashboard";
 	}

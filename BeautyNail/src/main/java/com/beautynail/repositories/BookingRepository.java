@@ -17,7 +17,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	//select * from booking where user = :user
 	List<Booking> findByUser(Users user);
 	
-	
 	//select * from booking where date =: date and time =: time
 	@Query("SELECT booking FROM Booking booking WHERE booking.date = :#{#req.date} and booking.time =:#{#req.time}")
 	Optional<Booking> findBookingByDateAndTime(@Param("req")Booking req);
@@ -30,7 +29,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 	//select * from booking where user = :null
 	List<Booking> findByUserIsNull();
 
-
-	
+	//select * from booking by date ASC
+	List<Booking> findAllByOrderByDateAsc();
 
 }

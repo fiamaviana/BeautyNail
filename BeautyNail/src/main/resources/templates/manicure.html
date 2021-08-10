@@ -67,9 +67,10 @@
 		        <div sec:authorize="hasRole('ADMIN')">
 		       		<a th:href="@{/manicure/{manicureID}(manicureID=${manicure.manicureID})}" class="btn btn-primary" style="float:left">Edit Content</a>
 		       	</div>
-		       	<div>
-		        	<a href="/dashboard" class="btn btn-primary" style="float:right">Book here</a>    
-			    </div>
+		       	<form action="/booking" method="post">
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+								<button class="btn btn-primary" id="book" style="float:right;margin-bottom:10px">Book here</button>
+							</form>
 		      </div>
 		    </div>
 		  </div>
